@@ -15,5 +15,28 @@
 <div>
 
 <script>
+  window.addEventListener("load", eventWindowLoaded, false);
+  function eventWindowLoaded () {
+    init();
+  }
+
+  const init = () => {
+    this.canvas = document.getElementById("filter");
+
+    if(canvas.getContext) {
+      this.ctx = canvas.getContext("2d");
+      this.img = document.querySelector("#slide");
+      this.range = canvas.parentNode.querySelector("input");
+      this.dispWidth = 1800;
+      this.dispHeight = 1000;
+      this.blurVal = 0;
+      this.mode = "RGB";
+
+      ctx.drawImage(img, 0, 0, dispWidth, dispHeight,  0, 0, canvas.width, canvas.height);
+    } else {
+      alert("you can NOT use canvas");
+    }
+  }
+
 
 </script>
