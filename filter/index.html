@@ -1,8 +1,8 @@
 <p>モード: <span id="span8">RGB</span></p>
-<input type="radio" name="c8" value="RGB" onchange="chgMode(this.value)" checked> カラー
-<input type="radio" name="c8" value="GRAY" onchange="chgMode(this.value)" > グレイスケール
-<input type="radio" name="c8" value="BINARY" onchange="chgMode(this.value)" > 2値画像<br><br>
-ぼけ値：<input type="range" min="0" max="5" step="0.1" value="0" oninput="chgBlur(this.value)"><br><br>
+<input type="radio" name="c8" value="RGB" onchange="changeMode(this.value)" checked> カラー
+<input type="radio" name="c8" value="GRAY" onchange="changeMode(this.value)" > グレイスケール
+<input type="radio" name="c8" value="BINARY" onchange="changeMode(this.value)" > 2値画像<br><br>
+ぼけ値：<input type="range" min="0" max="5" step="0.1" value="0" oninput="changeBlur(this.value)"><br><br>
 
 <div class="imgShow">
   <p>オリジナル</p>
@@ -27,16 +27,84 @@
       this.ctx = canvas.getContext("2d");
       this.img = document.querySelector("#slide");
       this.range = canvas.parentNode.querySelector("input");
-      this.dispWidth = 1800;
-      this.dispHeight = 1000;
+      this.displayWidth = 1800;
+      this.displayHeight = 1000;
       this.blurVal = 0;
       this.mode = "RGB";
 
-      ctx.drawImage(img, 0, 0, dispWidth, dispHeight,  0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, 0, 0, displayWidth, displayHeight,  0, 0, canvas.width, canvas.height);
     } else {
       alert("you can NOT use canvas");
     }
   }
 
+  const changeBlur = val => {
+    blurVal = val;
+    viewImg(mode, blurVal);
+  }
+
+  const changeMode = val => {
+    mode = val;
+    viewImg(mode, blurVal);
+  }
+
+  const viewImage = (mode, blurVal) => {
+    let span = documet.getElementById("span8");
+
+    if (mode == "RPG"){
+      span.textConntent = mode;
+      drawRgb(blurVal);
+    } else if (mode == "GRAY"){
+      span.textConntent = mode;
+      drawGray(blurVal);
+    } else if ( mode == "BINARY"){
+      span.textConntent = mode;
+      drawBinary(blurVal);
+    }
+  }
+
+  const drawRgb = blurVal => {
+    ctx.save();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.filter = "blur(" +blurVal +"px)";
+    ctx.drawImage(img, 0, 0, displayWidth, displayHeight, 0, 0, canvas.width, canvas.height);
+    ctx.restore();
+  }
+
+  const drawGray = blurVal => {
+    ctx.save();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.filter = "blur(" +blurVal +"px)";
+    ctx.drawImage(img, 0, 0, displayWidth, displayHeight, 0, 0, canvas.width, canvas.height);
+    ctx.globalCompositeOperation = "copy";
+    ctx.filter = "grayscale(100%)";
+    ctx.drawimage(canvas, 0, 0);
+    ctx.restore();
+  }
+
+  const drawBinary = blurVal => {
+    ctx.save();
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = `rgb(100, 100, 100)`;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.globalCompositeOperation = "lighten";
+    ctx.filter = "grayscale(100%)";
+    ctx.drawImage(img, 0, 0, dispWidth, dispHeight,  0, 0, canvas.width, canvas.height);
+    ctx.globalCompositeOperation = "difference";
+    ctx.filter = "none";
+    ctx.fillRect(0, 0, 200, 200);
+    ctx.globalCompositeOperation = "copy";
+    ctx.filter = "brightness(25500%)";
+    ctx.drawImage(canvas, 0, 0);
+    // ぼかしのfilterを追加
+    ctx.filter = "blur( "+ blurVal +"px)";
+    ctx.drawImage(canvas, 0, 0);
+    ctx.restore();
+  }
 
 </script>
+
+<style>
+
+
+</style>
