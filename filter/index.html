@@ -1,0 +1,19 @@
+<p>モード: <span id="span8">RGB</span></p>
+<input type="radio" name="c8" value="RGB" onchange="chgMode(this.value)" checked> カラー
+<input type="radio" name="c8" value="GRAY" onchange="chgMode(this.value)" > グレイスケール
+<input type="radio" name="c8" value="BINARY" onchange="chgMode(this.value)" > 2値画像<br><br>
+ぼけ値：<input type="range" min="0" max="5" step="0.1" value="0" oninput="chgBlur(this.value)"><br><br>
+
+<div class="imgShow">
+  <p>オリジナル</p>
+  <img id="slide" src="https://js-pro.jp/static/img/code-preview.49c1311.jpg" width="190" height="120">
+</div>
+
+<div class="imgShow">
+  <p>加工後</p>
+  <canvas id= "filter" width="200" height="130"></canvas>
+<div>
+
+<script>
+
+</script>
