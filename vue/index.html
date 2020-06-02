@@ -1,35 +1,52 @@
 <script src="https://cdn.jsdelivr.net/npm/vue"></script>
 
 <div id="app">
-  <component-a></component-a>
-  <component-b></component-b>
+  <my-component
+    v-bind:name.sync="name"
+    v-bind:age.sync="age"
+  ></my-component>
+  <button @click="confirm">Confirm</button>
 </div>
 
 <script>
-  // 以下にミックスインを定義してください
-  const myMixin = {
-    methods: {
-    hello: function(message){
-          alert("Hello World!")
-        }
+  const MyComponent = {
+    props: {
+    name: String,
+        age: Number
+    },
+    computed: {
+      name: {
+        get: function(){return this.$props.name},
+        set: function(newName){this.$emit("update:name", newName)}
+      },
+      age: {
+        get: function(){return this.$props.age},
+        set: function(newAge){this.$emit("update:age", newAge)}
+      }
+    },
+    template: `
+    <div>
+        Name:<input v-model="name"><br>
+      Age:<input v-model.number="age"><br>
+      </div>`
+  }
+
+new Vue({
+  el: '#app',
+  components: {
+    'my-component': MyComponent
+  },
+  data: function(){
+    return {
+    name: "",
+        age: ""
+    }
+  },
+  methods: {
+    confirm: function(){
+      alert(`Name: ${this.name}, Age: ${this.age}`)
     }
   }
 
-  const ComponentA = {
-    mixins: [myMixin],
-    template: `<button @click="hello()">ComponentA</button>`
-  }
-
-  const ComponentB = {
-    mixins: [myMixin],
-    template: `<button @click="hello()">ComponentB</button>`
-  }
-
-  new Vue({
-    el: '#app',
-    components: {
-      'component-a': ComponentA,
-      'component-b': ComponentB
-    }
-  })
+})
 </script>
