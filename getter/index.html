@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>getter</title>
+  </head>
+  <body>
+    <div id="app">
+      <p>countの値 : {{count}}</p>
+      <p>2倍の値 : {{twiceCount}}</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://unpkg.com/vuex@3.1.2/dist/vuex.js"></script>
+
+    <script>
+       const store = new Vuex.Store({
+         state: {
+           count: 5,
+         },
+         getters: {
+           twice(state) {
+             // countデータを2倍して返す処理を書いてください
+             return state.count * 2
+           }
+         }
+       })
+        new Vue ({
+         store,
+         el: '#app',
+         computed: {
+           count: function() {
+             return this.$store.state.count
+           },
+           twiceCount: function() {
+             // VuexのGettersに定義した関数を呼び出してください
+             return this.$store.getters.twice
+           }
+         }
+       })
+    </script>
+  </body>
+</html>
