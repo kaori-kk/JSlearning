@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>count todos</title>
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script src="https://unpkg.com/vuex@3.1.2/dist/vuex.js"></script>
+
+  <div id="app">
+    <p>完了したタスクの数：{{ doneTodosLength }}</p>
+  </div>
+
+  <script>
+    const store = new Vuex.Store({
+      state: {
+        todos: [
+          { text: 'メール処理', done: true },
+          { text: '会議', done: false }
+        ]
+      },
+      getters: {
+        doneTodos: state => {
+          return state.todos.filter(todo => todo.done)
+        },
+        doneTodosLength: (stete, getters) => {
+          return getters.doneTodos.length
+        }
+      }
+    })
+
+    new Vue ({
+      store,
+      el: '#app',
+      computed: {
+        doneTodos () {
+          return this.$store.getters.doneTodos
+        },
+        doneTodosLength () {
+          return this.$store.getters.doneTodosLength
+        }
+      }
+    })
+  </script>
+</body>
+</html>
