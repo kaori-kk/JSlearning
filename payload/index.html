@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>payload</title>
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script src="https://unpkg.com/vuex@3.1.2/dist/vuex.js"></script>
+
+  <div id="app">
+    <p>countの値 : {{ count }}</p>
+  </div>
+
+  <script>
+    const store = new Vuex.Store({
+      state: {
+        count: 0
+      },
+      mutations: {
+        increment (state, payload) {
+          state.count += payload.amount
+        }
+      }
+    })
+
+    store.commit({
+      type: 'increment',
+      amount: 10
+    })
+
+    new Vue ({
+      store,
+      el: '#app',
+      computed: {
+        count: function() {
+          return this.$store.state.count
+        }
+      }
+    })
+  </script>
+</body>
+</html>
