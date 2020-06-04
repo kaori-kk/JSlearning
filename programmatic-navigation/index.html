@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>programmatic-navigation</title>
+</head>
+<body>
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+
+  <div id="app">
+    <h1>Hello App!</h1>
+    <button @click="moveFoo()"> moveFoo </button>
+    <button @click="moveBar()"> moveBar </button>
+
+    <router-view></router-view>
+  </div>
+
+  <script>
+    const Foo = { template: '<div>foo</div>' }
+    const Bar = { template: '<div>bar</div>' }
+
+    const routes = [
+      { path: '/foo', component: Foo },
+      { path: '/bar', component: Bar }
+    ]
+
+    const router = new VueRouter({
+      routes
+    })
+
+    new Vue({
+      el: '#app',
+      router,
+      methods: {
+        moveFoo: function(){
+          this.$router.push('/foo');
+        },
+        moveBar: function(){
+          this.$router.push('/bar');
+        }
+      }
+    })
+  </script>
+</body>
+</html>
