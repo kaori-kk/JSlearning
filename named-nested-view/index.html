@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>named-nested-view</title>
+</head>
+<body>
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+
+  <div id="app">
+    <h2><router-link to="/nesting_view">ネストしているViewを表示</router-link></h2>
+    <router-view></router-view>
+  </div>
+
+  <script>
+    const View = {
+      template: `
+      <div>
+        <h4><router-link to="/nesting_view/nested_view">ネストされた名前付きViewへ</router-link></h4>
+        <h4><router-link to="/nesting_view/nested_view2">ネストされた名前付きView2へ</router-link></h4>
+        <router-view name="namedNestedView"/>
+        <router-view></router-view>
+      </div>
+    `
+    }
+
+    const ReturnLink = { template: '<router-link to="/">戻る</router-link>' }
+    const NamedNestedView = { template: '<div>ネストされた名前付きView</div>' }
+    const NamedNestedView2 = { template: '<div>ネストされた名前付きView2</div>' }
+
+    const routes = [{
+      path: '/nesting_view',
+      component: View,
+      children: [{
+        path: 'nested_view',
+        components: {
+          default: ReturnLink,
+          namedNestedView: NamedNestedView
+        }
+      },
+      {
+        path: 'nested_view2',
+        components: {
+          default: ReturnLink,
+          namedNestedView: NamedNestedView2
+        }
+      }]
+    }]
+
+    const router = new VueRouter({
+      routes
+    })
+
+    new Vue({
+      router,
+      el: '#app'
+    })
+  </script>
+</body>
+</html>

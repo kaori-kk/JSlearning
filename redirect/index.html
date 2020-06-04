@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>redirect</title>
+</head>
+<body>
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+
+  <div id="app">
+    <h1>リダイレクト</h1>
+    <router-link to="/redirect">リダイレクトリンク</router-link><br>
+    <router-view name="a"></router-view>
+    <router-view></router-view>
+  </div>
+
+  <script>
+    const NamedView = { template: '<div>View</div>' }
+    const NamedViewRedirect = { template: '<div>RedirectView</div>' }
+    const ReturnLink = { template: '<router-link to="/">戻る</router-link>' }
+
+    const routes = [
+      { path: '/',
+         components: {
+           default: ReturnLink,
+           a: NamedView
+         }
+      },
+      {
+        path: "/redirect",
+        redirect: "/other"
+      },
+      {
+        path: "/other",
+        components: {
+          default: ReturnLink,
+          a: NamedViewRedirect
+        }
+      }
+    ]
+
+    const router = new VueRouter({
+      routes
+    })
+
+    new Vue({
+      router,
+      el: '#app'
+    })
+  </script>
+</body>
+</html>
