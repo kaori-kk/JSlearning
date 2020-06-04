@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>actions</title>
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script src="https://unpkg.com/vuex@2.0.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <div id="app">
+    search:
+    <select v-model="selectedLang">
+      <option>javascript</option>
+      <option>python</option>
+      <option>ruby</option>
+    </select>
+    <li v-for="name in names">{{ name }}</li>
+  </div>
+
+  <script>
+    const store = new Vuex.Store({
+      state: {
+        names: []
+      },
+      actions: {
+        async search_frameworks({ commit, state }, val) {
+          const url = '/api/v1/mock/search/frameworks'
+          const option = { params: { lang: val } }
+          const { data } = await axios.get(url, option)
+          commit('setNames', data.names)
+        }
+      },
+      mutations: {
+        setNames(state, names) {
+          state.names = names
+        }
+      }
+    })
+
+    new Vue ({
+      store,
+      el: '#app',
+      data: {
+        selectedLang: ''
+      },
+      computed: {
+        names: function() {
+          return this.$store.state.names
+        }
+      },
+      methods: {
+        search_frameworks: function(lang) {
+          this.$store.dispatch('search_frameworks', lang)
+        }
+      },
+      watch: {
+        selectedLang: function (val) {
+      this.search_frameworks(val)
+        }
+      }
+    })
+  </script>
+</body>
+</html>
