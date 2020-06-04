@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>nested-route</title>
+</head>
+<body>
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+
+  <div id="app">
+    <p>
+      <router-link to="/user/foo">/user/foo</router-link>
+      <router-link to="/user/foo/profile">/user/foo/profile</router-link>
+      <router-link to="/user/foo/posts">/user/foo/posts</router-link>
+    </p>
+
+    <router-view></router-view>
+  </div>
+
+  <script>
+    const User = {
+      template:
+        `<div class="user">
+            <h2>UserComp {{ $route.params.id }}</h2>
+            <router-view></router-view>
+          </div>`
+    }
+
+    const UserHome = { template: '<div>UserHomeComp</div>' }
+    const UserProfile = { template: '<div>UserProfileComp</div>' }
+    const UserPosts = { template: '<div>UserPostsComp</div>' }
+
+    const routes = [
+      {
+        path: '/user/:id',
+        component: User,
+        children: [
+          { path: '', component: UserHome },
+          { path: 'profile', component: UserProfile },
+          { path: 'posts', component: UserPosts }
+        ]
+      }
+    ]
+
+    const router = new VueRouter({
+      routes
+    })
+
+    new Vue({
+      el: '#app',
+      router
+    })
+  </script>
+</body>
+</html>
