@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>beforeRouteLeave</title>
+</head>
+<body>
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+
+  <div id="app">
+    <router-view></router-view>
+    <ul>
+      <li><router-link to="/">Go to Top</router-link></li>
+      <li><router-link to="/editor">Go to Editor</router-link></li>
+    </ul>
+  </div>
+
+  <script>
+    const Top = { template: '<h1>Top</h1>' }
+    const Editor = {
+      beforeRouteLeave(to, from, next) {
+        const message = 'テキストエリアの内容は破棄されますがよろしいですか？'
+        const answer = window.confirm(message)
+        if (answer) next()
+        else next(false)
+      },
+      template: `
+        <div>
+          <h1>Editor</h1>
+          <textarea></textarea>
+        </div>`
+    }
+
+    const routes = [
+      { path: '/', component: Top },
+      { path: '/editor', component: Editor }
+    ]
+
+    const router = new VueRouter({
+      routes
+    })
+
+    const app = new Vue({
+      el: '#app',
+      router
+    })
+  </script>
+</body>
+</html>
