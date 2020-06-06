@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>beforeEach</title>
+</head>
+<body>
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+
+  <div id="app">
+    <router-view></router-view>
+    <li><router-link to="/">Go to Top</router-link></li>
+    <li><router-link to="/public">Go to Public</router-link></li>
+    <li><router-link to="/premium">Go to Premium</router-link></li>
+  </div>
+
+  <script>
+    const Top = { template: '<h1>Top</h1>' }
+    const Public = { template: '<h1>Public</h1>' }
+    const Premium = { template: '<h1>Premium</h1>' }
+
+    const routes = [
+      { path: '/', component: Top },
+      { path: '/public', component: Public },
+      { path: '/premium', component: Premium, meta: { isPremium: true } }
+    ]
+
+    const router = new VueRouter({
+      routes
+    })
+
+    router.beforeEach((to, from, next) => {
+      if (to.meta.isPremium) {
+        alert('有料コンテンツです。Topに戻ります。')
+        next('/')
+      } else {
+        next()
+      }
+    })
+
+    const app = new Vue({
+      el: '#app',
+      router
+    })
+  </script>
+</body>
+</html>
