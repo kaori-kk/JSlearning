@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>alias</title>
+</head>
+<body>
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+
+  <div id="app">
+    <h1>リダイレクト</h1>
+    <router-link to="/other1">エイリアスリンク1</router-link>
+    <router-link to="/other2">エイリアスリンク2</router-link>
+    <router-link to="/other3">エイリアスリンク3</router-link><br>
+    <router-view name="a"></router-view>
+    <router-view></router-view>
+  </div>
+
+  <script>
+    const NamedView = { template: '<div>View</div>' }
+    const NamedViewAlias = { template: '<div>AliasView</div>' }
+    const ReturnLink = { template: '<router-link to="/">戻る</router-link>' }
+
+    const routes = [
+      {
+        path: '/',
+        components: {
+          default: ReturnLink,
+          a: NamedView
+        }
+      },
+      {
+        path: '/otherAlias',
+        components: {
+          default: ReturnLink,
+          a: NamedViewAlias
+        },
+        alias: ['/other1','/other2','/other3']
+      }
+    ]
+
+    const router = new VueRouter({
+      routes
+    })
+
+    new Vue({
+      router,
+      el: '#app'
+    })
+  </script>
+</body>
+</html>
