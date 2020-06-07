@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ToDo List</title>
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+
+  <div id="app">
+    <h1>ToDo List</h1>
+    <label>Category</label>
+    <!-- selictタグにv-modelを設定してください -->
+    <select v-model="selectedGenre">
+      <!-- optionタグにv-forと:valueを設定してください -->
+      <option v-for="genre in genres" :value="genre">{{ genre }}</option>
+    </select>
+    <br><br>
+    <label>Task</label>
+    <!-- textaraタグにv-modelを設定してください -->
+    <textarea v-model="task"></textarea>
+    <br><br>
+    <!-- buttonタグを記述してください -->
+    <button>Add</button>
+    <hr>
+  </div>
+
+  <script>
+    new Vue({
+      el: "#app",
+      data: {
+        // 配列genresに要素を定義してください
+        genres: ["Admin", "Meeting", "Call", "Housework", "Shopping"],
+        // taskメソッドを定義してください
+        task: "",
+        // selectedGenreメソッドを定義してください
+        selectedGenre: ""
+      }
+    })
+  </script>
+</body>
+</html>
