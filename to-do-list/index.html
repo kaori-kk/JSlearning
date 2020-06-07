@@ -22,8 +22,8 @@
     <task-component
       v-for="(task, index) in taskList"
       v-bind:taskname="task.taskname"
-      v-bind:genre="task.genre"
       v-bind:date="task.date"
+      v-bind:genre="task.genre"
       v-bind:index="index"
     ></task-component>
   </div>
@@ -31,15 +31,23 @@
 
   <script>
     Vue.component("task-component", {
-      props: ["taskname", "genre", "date", "index"],
+      props: ["taskname", "date", "genre", "index"],
       template: `
-        <div>
-          category: {{genre}}
-          <br>task: {{taskname}}
-          <br>date: {{date}}
-          <br><button>Mark as Done</button>
-          <button @click="deleteTask(Number(index))">Delete</button>
+        <div class="taskarea">
+          <div :class="{ 'completed': isCompleted}">
+            Category: {{genre}}
+            <br>Task: {{taskname}}
+            <br>Date: {{date}}
+          </div>
+            <br><button @click="deleteTask(Number(index))">Delete</button>
+            <button v-on:click="isCompleted=true">完了</button>
+            <button v-on:click="isCompleted=false">完了取消</button>
         </div>`,
+      data: function(){
+        return {
+          isCompleted: false
+        }
+      },
       methods: {
         deleteTask: function(index){
           this.$root.taskList.splice(index,1)
@@ -73,5 +81,22 @@
       }
     })
   </script>
+
+  <style>
+    .inActive {
+    pointer-events: none;
+    color: gray;
+  }
+  .taskarea {
+    margin-left: 10px;
+    margin-bottom: 10px;
+    background-color:#fafad2;
+    padding: 10px 10px 10px 10px;
+  }
+  .completed {
+    text-decoration: line-through;
+  }
+  </style>
+
 </body>
 </html>
