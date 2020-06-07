@@ -38,8 +38,13 @@
           <br>task: {{taskname}}
           <br>date: {{date}}
           <br><button>Mark as Done</button>
-          <button>Delete</button>
-        </div>`
+          <button @click="deleteTask(Number(index))">Delete</button>
+        </div>`,
+      methods: {
+        deleteTask: function(index){
+          this.$root.taskList.splice(index,1)
+        }
+      }
     })
 
     new Vue({
