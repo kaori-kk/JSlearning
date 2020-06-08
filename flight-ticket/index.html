@@ -16,14 +16,41 @@
     <div>
       出発地：
       <select v-model="depatureRegion">
-        <option v-for="region in regions">{{region.text}}</option>
+        <option v-for="region in regions" :value="region.value">{{region.text}}</option>
       </select>
+      <div v-for="airport in departureAirports">
+        <input type="radio" v-model="departurePlace" :value="airport">{{airport}}</input>
+      </div>
     </div>
     <div>
       目的地：
       <select v-model="destinationRegion">
-        <option v-for="region in regions">{{region.text}}</option>
+        <option v-for="region in regions" :value="region.value">{{region.text}}</option>
       </select>
+      <div v-for="airport in destinationAirports">
+        <input type="radio" v-model="destinationPlace" :value="airport">{{airport}}</input>
+      </div>
+      <div>出発地 → 目的地： {{departurePlace}} → {{destinationPlace}} </div>
+    </div>
+
+    <h3>搭乗時間の選択</h3>
+    <table border class="table">
+      <caption>時間に応じた料金</caption>
+      <tr>
+        <th>時間</th>
+        <th>料金（円）</th>
+      </tr>
+      <tr v-for="value in timeBasedPrice">
+        <td>{{value.time}}</td>
+        <td>{{value.price}}</td>
+      </tr>
+    </table>
+    <div>
+      <h4>時間を選択してください</h4>
+      <div v-for="value in timeBasedPrice">
+        <input type="radio" v-model="pricePerMan" :value="value.price">{{value.time}}</input>
+      </div>
+      <p>一人当たりの金額：{{pricePerMan}}円</p>
     </div>
   </div>
 
@@ -35,22 +62,49 @@
       pointer-events: none;
       color: gray;
     }
+
   </style>
 
   <script>
     new Vue({
       el: "#app",
-      data:
-    depatureRegion: "",
-      destinationRegion: "",
-      regions: [
-        {text: "北海道地方", value: "hokkaido"},
-        {text: "関東地方", value: "kanto"},
-        {text: "近畿地方", value: "kinki"},
-        {text: "沖縄地方", value: "okinawa"},
-      ]
-      }
+      data:{
+        depatureRegion: "",
+        destinationRegion: "",
+        regions: [
+            {text: "北海道地方", value: "hokkaido"},
+            {text: "関東地方", value: "kanto"},
+            {text: "近畿地方", value: "kinki"},
+            {text: "沖縄地方", value: "okinawa"},
+          ],
+        departureAirports: [],
+        departurePlace: '',
+        destinationPlace: '',
+        destinationAirports: [],
+        timeBasedPrice: [
+          {time: "8:00", price: "5000"},
+          {time: "12:00", price: "7500"},
+          {time: "19:00", price: "10000"},
+        ],
+        pricePerMan:0
+      },
+      watch: {
+        departureRegion: function(val){
+          axios.get("/api/v1/mock/search/airports", {
+            params: {region:val}
+          }).then(function(res){
+            this.departureRegion = res.data.names
+          }.bind(this))
+        },
+        destinationRegion: function(val){
+          axios.get("/api/v1/mock/search/airports", {
+            params: {region:val}
+          }).then(function(res){
+            this.destinationRegion = res.data.names
+          }.bind(this))
+        }
 
+      }
     })
   </script>
 </body>
