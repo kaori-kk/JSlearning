@@ -74,6 +74,25 @@
       <button @click="companions++" :class="{ inactive: isUpperVal }">＋</button>
       <button @click="companions--" :class="{ inactive: isLowerVal }">ー</button>
       <span v-show="isUpperVal">同乗者の追加は９人までとなります</span>
+      <br>
+    </div>
+
+    <div class="info-summary">
+      <h2>3. お申し込み内容の確認</h2>
+      <div>・フライト情報</div>
+      <!-- 出発地、目的地にて選択した空港を２つとも表示させてください -->
+      <div>出発地 → 目的地：{{departurePlace}} → {{destinationPlace}} </div>
+      <!-- computedにて、totalFee = 一人あたりの値段 ✕ (同乗者 + 1) と計算し、totalFeeを表示して下さい-->
+      <div>合計金額：{{totalFee}}円</div>
+      <div>・お客様情報</div>
+      <!-- computedにて、フォームで入力した姓名を結合し、fullNameとして表示して下さい -->
+      <div>申込者 氏名：{{fullName}}</div>
+      <!-- birthdayを表示してください -->
+      <div>申込者 生年月日：{{birthday}}</div>
+      <!-- 選択した性別を表示してください -->
+      <div>申込者 性別：{{selectedGender}}</div>
+      <!-- 同乗者の人数を表示して下さい -->
+      <div>同乗者 人数：{{companions}}人</div>
     </div>
   </div>
 
@@ -84,6 +103,12 @@
     .inactive {
       pointer-events: none;
       color: gray;
+    }
+
+    .info-summary{
+      background-color: #A8DADC;
+      padding: 5px 0px 10px 0px;
+      margin-top: 10px;
     }
 
   </style>
@@ -123,6 +148,12 @@
         },
         isLowerVal:function(){
           return this.companions <= 0
+        },
+        fullName:function(){
+          return this.firstName + this.lastName
+        },
+        totalFee:function(){
+          return (this.companions + 1) * this.pricePerMan
         }
       },
       watch: {
