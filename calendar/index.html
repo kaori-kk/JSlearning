@@ -5,27 +5,35 @@
   <title>calendar</title>
 </head>
 <body>
-  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
 
 <div id="app">
-  <h1>2020 Calendar</h1>
+  <h1>Calendar</h1>
   <div id="menu">
     <month-menu
       v-for="date in dates"
       :year="date.year"
       :month="date.month"
-      @clicked-display-button="getCalendar"
-    >
+      @clicked-display-button="getCalendar">
     </month-menu>
   </div>
+  <br>
+  <table border="1">
+    <tr>
+      <th v-for="header in headers">{{ header }}</th>
+    </tr>
+    <tr v-for="oneweek in dateObjects">
+      <td v-for="date in oneweek">{{ date | addDate }}</td>
+    </tr>
+  </table>
 </div>
 
 <script>
-  Vue.filter("addYear", function(value) {
+  Vue.filter('addYear', function(value) {
     if(value != "") {
       value = value + "年";
     }
-      return value
+    return value;
   })
 
   Vue.filter('addMonth', function(value) {
@@ -43,13 +51,14 @@
   })
 
   Vue.component('month-menu', {
-    props: ["year", "month"],
-    template: `<button @click="display(year, month)">
-        {{year | addYear }}{{month | addMonth }}
+    props: ['year', 'month'],
+    template: `
+      <button @click="display(year,month)">
+        {{ year | addYear }}{{ month | addMonth }}
       </button>`,
     methods: {
-      display: function(year, month){
-        this.$emit("clicked-display-button", year, month)
+      display: function(year, month) {
+        this.$emit('clicked-display-button', year, month);
       }
     }
   })
@@ -69,34 +78,55 @@
         {year: 2020, month: 9},
         {year: 2020, month: 10},
         {year: 2020, month: 11},
-        {year: 2020, month: 12},
-      ]
+        {year: 2020, month: 12}
+      ],
+      dateObjects: [],
+      headers: ["日","月","火","水", "木", "金", "土"]
     },
     methods: {
-      getCalendar:function(year, month){
-        alert(year + "年" + month + "月")
+      getCalendar: function(year, month) {
+        const lastDate = new Date(Number(year), Number(month), 0);
+        const checkDay = new Date(lastDate)
+        this.dateObjects = [];
+        let oneweek = [];
+        for(let i = 0; i < lastDate.getDate(); i++) {
+          checkDay.setDate(i + 1);
+          if(i === 0) {
+            for(let j = 0; j < checkDay.getDay(); j++) {
+              oneweek.push("");
+            }
+          }
+          oneweek.push(i+1);
+          if(checkDay.getDay() === 6) {
+            this.dateObjects.push(oneweek);
+            oneweek = [];
+          }
+        }
+        if(checkDay.getDay != 6) {
+          this.dateObjects.push(oneweek);
+        }
       }
     }
   })
 </script>
 
-<style>
-  td { height: 100px; }
-  table {
-    width: 500px;
-    border-collapse: collapse;
-    margin: auto;
-    margin-top: 20px;
-  }
-  button {
-    margin-right: 1px;
-  }
-  #menu {
-    text-align:center;
-  }
-  h1 {
-    text-align:center;
-  }
-</style>
+  <style>
+    td { height: 100px; }
+    table {
+      width: 500px;
+      border-collapse: collapse;
+      margin: auto;
+      margin-top: 20px;
+    }
+    button {
+      margin-right: 1px;
+    }
+    #menu {
+      text-align:center;
+    }
+    h1 {
+      text-align:center;
+    }
+  </style>
 </body>
 </html>
