@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Shopping Form</title>
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+  <div id="app">
+    <div class="header">商品の登録</div>
+    <child-event></child-event>
+  </div>
+
+  <script>
+    Vue.component('child-event', {
+      template:`
+        <div>
+          商品名 <input type="text" v-model="inputProduct" @keydown.enter="caution()"><br>
+          値段　 <input type="number" v-model="inputPrice" @keydown.enter="caution()">
+          <button @click="addProduct">追加</button>
+        </div>
+      `,
+      data: function() {
+        return {
+          inputProduct: '',
+          inputPrice: null
+        }
+      },
+      methods: {
+        addProduct: function() {
+          if(confirm(`${this.inputProduct}を${this.inputPrice}円で追加しても良いですか？`)) {
+            alert(`${this.inputProduct}を追加しました`)
+          }
+        }
+      }
+    });
+
+    Vue.mixin({
+      methods: {
+        caution: function() {
+          alert('商品を追加するには、「追加」ボタンを押して下さい')
+        }
+      }
+    });
+
+    new Vue({
+      el:'#app'
+    });
+  </script>
+  <style>
+    .header {
+      background-color: #428abd;
+      text-align: center;
+      color: white;
+      margin: 5px auto;
+    }
+    form {
+      float: right;
+      margin: 20px 50px;
+    }
+    form button {
+      width: 150px;
+      font-size: 20px;
+      border: solid 1px black;
+      border-radius: 10px;
+    }
+    table {
+      margin: 10px auto;
+      text-align: center;
+    }
+    th {
+      width: 100px;
+    }
+  </style>
+</body>
+</html>
