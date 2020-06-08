@@ -21,9 +21,37 @@
 </div>
 
 <script>
+  Vue.filter("addYear", function(value) {
+    if(value != "") {
+      value = value + "年";
+    }
+      return value
+  })
+
+  Vue.filter('addMonth', function(value) {
+    if(value != "") {
+      value = value + "月";
+    }
+    return value;
+  })
+
+  Vue.filter('addDate', function(value) {
+    if(value != "") {
+      value = value + "日";
+    }
+    return value;
+  })
+
   Vue.component('month-menu', {
     props: ["year", "month"],
-    template: `<button>{{ year }}年{{ month }}月</button><br>`
+    template: `<button @click="display(year, month)">
+        {{year | addYear }}{{month | addMonth }}
+      </button>`,
+    methods: {
+      display: function(year, month){
+        this.$emit("clicked-display-button", year, month)
+      }
+    }
   })
 
   new Vue({
@@ -43,6 +71,11 @@
         {year: 2020, month: 11},
         {year: 2020, month: 12},
       ]
+    },
+    methods: {
+      getCalendar:function(year, month){
+        alert(year + "年" + month + "月")
+      }
     }
   })
 </script>
