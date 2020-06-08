@@ -9,7 +9,8 @@
 
   <div id="app">
     <div class="header">商品の登録</div>
-    <child-event></child-event>
+    <child-event @from-child="append"></child-event>
+    <my-component>{{registeredProduct}}</my-component>
   </div>
 
   <script>
@@ -30,6 +31,7 @@
       methods: {
         addProduct: function() {
           if(confirm(`${this.inputProduct}を${this.inputPrice}円で追加しても良いですか？`)) {
+            this.$emit("from-child", {product: this.inputProduct, price: this.inputPrice})
             alert(`${this.inputProduct}を追加しました`)
           }
         }
@@ -45,8 +47,33 @@
     });
 
     new Vue({
-      el:'#app'
+      el:'#app',
+      components: {
+        "my-component": {
+          template:`
+            <div>
+              最近追加した商品: <slot></slot>
+            </div>`
+        }
+      },
+      data: {
+        registeredProduct: "なし",
+        registeredPrice: 0,
+        registrations: []
+      },
+      methods: {
+        append:function(registration){
+          this.registeredProduct = registration.product
+          this.registeredPrice = registration.price
+          registrations.push({
+            product: this.registeredProduct,
+            price: this.redisteredPrice
+          })
+        }
+      }
+
     });
+
   </script>
   <style>
     .header {
