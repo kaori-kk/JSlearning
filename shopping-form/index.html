@@ -5,100 +5,135 @@
   <title>Shopping Form</title>
 </head>
 <body>
-  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
 
-  <div id="app">
-    <div class="header">商品の登録</div>
-    <child-event @from-child="append"></child-event>
-    <my-component>{{registeredProduct}}</my-component>
-  </div>
+<div id="app">
+  <div class="header">商品の登録</div>
+  <child-event @from-child="append"></child-event>
+  <my-component>{{ registeredProduct }}</my-component>
 
-  <script>
-    Vue.component('child-event', {
-      template:`
-        <div>
-          商品名 <input type="text" v-model="inputProduct" @keydown.enter="caution()"><br>
-          値段　 <input type="number" v-model="inputPrice" @keydown.enter="caution()">
-          <button @click="addProduct">追加</button>
-        </div>
-      `,
-      data: function() {
-        return {
-          inputProduct: '',
-          inputPrice: null
-        }
-      },
-      methods: {
-        addProduct: function() {
-          if(confirm(`${this.inputProduct}を${this.inputPrice}円で追加しても良いですか？`)) {
-            this.$emit("from-child", {product: this.inputProduct, price: this.inputPrice})
-            alert(`${this.inputProduct}を追加しました`)
-          }
+  <hr>
+  <table>
+    <thread>
+      <tr>
+        <th>商品名</th>
+        <th >価格</th>
+        <th >操作</th>
+      </tr>
+    </thread>
+    <tbody>
+      <tr v-for="item in registrations">
+        <td>{{ item.product }}</td>
+        <td>{{ item.price | number | yen}}</td>
+        <td>　
+          <button @click="removeProduct(item)">削除</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <hr>
+</div>
+
+<script>
+  Vue.component('child-event', {
+    template:`
+      <div>
+        商品名 <input type="text" v-model="inputProduct" @keydown.enter="caution()"><br>
+        値段　 <input type="number" v-model.number="inputPrice" @keydown.enter="caution()">
+        <button @click="addProduct">追加</button>
+      </div>
+    `,
+    data: function() {
+      return {
+        inputProduct: '',
+        inputPrice: null
+      }
+    },
+    methods: {
+      addProduct: function() {
+        if(confirm(`${this.inputProduct}を${this.inputPrice}円で追加しても良いですか？`)) {
+          this.$emit('from-child', {product: this.inputProduct, price: this.inputPrice})
+          alert(`${this.inputProduct}を追加しました`)
         }
       }
-    });
+    }
+  });
 
-    Vue.mixin({
-      methods: {
-        caution: function() {
-          alert('商品を追加するには、「追加」ボタンを押して下さい')
+  Vue.mixin({
+    methods: {
+      caution: function() {
+        alert('商品を追加するには、「追加」ボタンを押して下さい')
+      }
+    }
+  });
+
+  new Vue({
+    el:'#app',
+    components: {
+      'my-component': {
+        template: `
+          <div>
+            最近追加した商品：<slot></slot>
+          </div>
+        `
+      }
+    },
+    data: {
+      registeredProduct: 'なし',
+      registeredPrice: 0,
+      registrations: []
+    },
+    filters: {
+      number: function(val) {
+        return val.toLocaleString()
+    },
+      yen: function(val) {
+        return "¥" + val
+      }
+    },
+    methods: {
+      append: function(registration) {
+        this.registeredProduct = registration.product;
+        this.registeredPrice = registration.price;
+        this.registrations.push({
+          product: this.registeredProduct,
+          price: this.registeredPrice
+        });
+      },
+      removeProduct: function(item) {
+        if(confirm('本当に削除しますか？')) {
+          var index = this.registrations.indexOf(item)
+          this.registrations.splice(index, 1)
         }
       }
-    });
+    }
+  });
+</script>
 
-    new Vue({
-      el:'#app',
-      components: {
-        "my-component": {
-          template:`
-            <div>
-              最近追加した商品: <slot></slot>
-            </div>`
-        }
-      },
-      data: {
-        registeredProduct: "なし",
-        registeredPrice: 0,
-        registrations: []
-      },
-      methods: {
-        append:function(registration){
-          this.registeredProduct = registration.product
-          this.registeredPrice = registration.price
-          registrations.push({
-            product: this.registeredProduct,
-            price: this.redisteredPrice
-          })
-        }
-      }
-
-    });
-
-  </script>
-  <style>
-    .header {
-      background-color: #428abd;
-      text-align: center;
-      color: white;
-      margin: 5px auto;
-    }
-    form {
-      float: right;
-      margin: 20px 50px;
-    }
-    form button {
-      width: 150px;
-      font-size: 20px;
-      border: solid 1px black;
-      border-radius: 10px;
-    }
-    table {
-      margin: 10px auto;
-      text-align: center;
-    }
-    th {
-      width: 100px;
-    }
-  </style>
+<style>
+  .header {
+    background-color: #428abd;
+    text-align: center;
+    color: white;
+    margin: 5px auto;
+  }
+  form {
+    float: right;
+    margin: 20px 50px;
+  }
+  form button {
+    width: 150px;
+    font-size: 20px;
+    border: solid 1px black;
+    border-radius: 10px;
+  }
+  table {
+    margin: 10px auto;
+    text-align: center;
+  }
+  th {
+    width: 100px;
+  }
+</style>
 </body>
 </html>
