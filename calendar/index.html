@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>calendar</title>
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+
+<div id="app">
+  <h1>2020 Calendar</h1>
+  <div id="menu">
+    <month-menu
+      v-for="date in dates"
+      :year="date.year"
+      :month="date.month"
+      @clicked-display-button="getCalendar"
+    >
+    </month-menu>
+  </div>
+</div>
+
+<script>
+  Vue.component('month-menu', {
+    props: ["year", "month"],
+    template: `<button>{{ year }}年{{ month }}月</button><br>`
+  })
+
+  new Vue({
+    el: "#app",
+    data: {
+      dates: [
+        {year: 2020, month: 1},
+        {year: 2020, month: 2},
+        {year: 2020, month: 3},
+        {year: 2020, month: 4},
+        {year: 2020, month: 5},
+        {year: 2020, month: 6},
+        {year: 2020, month: 7},
+        {year: 2020, month: 8},
+        {year: 2020, month: 9},
+        {year: 2020, month: 10},
+        {year: 2020, month: 11},
+        {year: 2020, month: 12},
+      ]
+    }
+  })
+</script>
+
+<style>
+  td { height: 100px; }
+  table {
+    width: 500px;
+    border-collapse: collapse;
+    margin: auto;
+    margin-top: 20px;
+  }
+  button {
+    margin-right: 1px;
+  }
+  #menu {
+    text-align:center;
+  }
+  h1 {
+    text-align:center;
+  }
+</style>
+</body>
+</html>
