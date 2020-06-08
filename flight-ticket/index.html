@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>flight ticket info</title>
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <div id="app">
+    <h1>航空券のご予約</h1>
+    <p>JS-Pro.AirLineをご利用頂きありがとうございます。以下に必要情報をご入力ください。</p>
+    <h2>1. フライト情報の入力</h2>
+    <h3>出発地と目的地の選択</h3>
+    <div>
+      出発地：
+      <select v-model="depatureRegion">
+        <option v-for="region in regions">{{region.text}}</option>
+      </select>
+    </div>
+    <div>
+      目的地：
+      <select v-model="destinationRegion">
+        <option v-for="region in regions">{{region.text}}</option>
+      </select>
+    </div>
+  </div>
+
+  <style>
+    .table {
+      text-align: center;
+    }
+    .inactive {
+      pointer-events: none;
+      color: gray;
+    }
+  </style>
+
+  <script>
+    new Vue({
+      el: "#app",
+      data:
+    depatureRegion: "",
+      destinationRegion: "",
+      regions: [
+        {text: "北海道地方", value: "hokkaido"},
+        {text: "関東地方", value: "kanto"},
+        {text: "近畿地方", value: "kinki"},
+        {text: "沖縄地方", value: "okinawa"},
+      ]
+      }
+
+    })
+  </script>
+</body>
+</html>
