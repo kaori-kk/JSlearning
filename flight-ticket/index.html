@@ -52,6 +52,29 @@
       </div>
       <p>一人当たりの金額：{{pricePerMan}}円</p>
     </div>
+
+    <div>
+      <h2>お客様情報の入力</h2>
+      <span>ご予約者様の氏名</span>
+      <span>性: <input v-model="firstName"></span>
+      <span>名: <input v-model="lastName"></span>
+      <br>
+
+      <span>生年月日</span>
+      <input type="date" v-model="birthday">
+      <br>
+
+      <span>性別</span>
+      <span v-for="gender in genders">
+        <input type="radio" v-model="selectedGender" :value="gender">{{gender}}
+      </span>
+      <br>
+
+      <span>同乗者人数 {{companions}}人</span>
+      <button @click="companions++" :class="{ inactive: isUpperVal }">＋</button>
+      <button @click="companions--" :class="{ inactive: isLowerVal }">ー</button>
+      <span v-show="isUpperVal">同乗者の追加は９人までとなります</span>
+    </div>
   </div>
 
   <style>
@@ -86,7 +109,21 @@
           {time: "12:00", price: "7500"},
           {time: "19:00", price: "10000"},
         ],
-        pricePerMan:0
+        pricePerMan:0,
+        firstName: "",
+        lastName: "",
+        birthday: "",
+        genders: ["男", "女"],
+        companions: 0,
+        selectedGender: ""
+      },
+      computed: {
+        isUpperVal:function(){
+          return this.companions >= 9
+        },
+        isLowerVal:function(){
+          return this.companions <= 0
+        }
       },
       watch: {
         departureRegion: function(val){
