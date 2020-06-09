@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Test Website</title>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+    <script src="https://unpkg.com/vuex@2.0.0"></script>
+    <script src="https://unpkg.com/vue-router@2.0.0/dist/vue-router.js"></script>
+    
+    <div id="app">
+      <nav>
+        <ul>
+          <router-link tag="li" to="/" exact><a>Home</a></router-link>
+          <router-link tag="li" to="/login"><a>Login</a></router-link>
+          <router-link tag="li" to="/user"><a>会員サイト</a></router-link>
+        </ul>
+      </nav>
+      
+      <router-view></router-view>
+    </div>
+       
+    <script>
+      const Home = {template: '<h1>Welcome</h1>'};
+      
+      const Login  = { 
+        template: `
+          <div>
+            <h1>Login</h1>
+            <div class="form-input">
+                <input type="email" name="email" 　required="required" placeholder="Email Address"></input>
+            </div>
+            <div class="form-input">
+              <input type="password" name="password" 　required="required" placeholder="Password"></input>
+            </div>
+            <div class="form-button">
+              <input  id="login-button" type="button" value="Login">
+            </div>
+          </div>` 
+      };
+      
+      const User  = { template: '<h1>会員ページ</h1>' };
+    
+      const routes = [
+        { path: '/',    component: Home },
+        { path: '/login', component: Login },
+        { path: '/user', component: User, meta: { checkLogin: true } }
+      ];
+    
+      const router = new VueRouter({
+        routes
+      });
+    
+      const app = new Vue({
+        router
+      }).$mount('#app');
+    </script>
+    
+    <style>
+      nav {
+        background-color: black;
+      }
+      li {
+        display: inline-block;
+        margin: 0;
+        padding: 0;
+        width: 100px;
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+      }
+      li > a {
+        display: block;
+        text-decoration: none;
+        color: gray;
+        transition: all .3s ease-in-out;
+      }
+      .router-link-active > a,
+      ul > li > a:hover {
+        background-color: gray;
+        color: white;
+      }
+      h1, .form-input, .form-button {
+        text-align: center;
+        margin-bottom: 15px;
+      }
+      input[type=email], input[type=password] {
+        height: 30px;
+        font-size: 20px;
+        width: 300px;
+      }
+      input[type=button] {
+        -webkit-appearance: none;
+        width:300px;
+        height: 30px;
+      }
+     </style>
+</body>
+</html>
