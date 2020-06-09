@@ -28,18 +28,18 @@
         Email：<input><br>
         Password：<input type=password><br>
         Password Confirmation：<input type=password><br>
-        <button type="submit">Create Account</button>
+        <button type="submit" @click="$root.send('Loged in successfully')">Create Account</button>
       </div>`
   })
 
-  // ログイン画面用コンポーネント
+
   Vue.component('login', {
     template: `
       <div class="tab-body">
         <h2>Log In</h2>
         Email：<input><br>
         Password：<input type=password><br>
-        <button type="submit">Login</button>
+        <button type="submit" @click="$root.send('Created account successfully')">Login</button>
       </div>`
   })
 
@@ -51,6 +51,11 @@
           {menuName: "Sign up", compName: "new-account"}
         ],
         currentTab: "login"
+      },
+      methods: {
+        send: function(message){
+          alert(message)
+        }
       }
     })
   </script>
