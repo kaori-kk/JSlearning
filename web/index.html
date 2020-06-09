@@ -64,6 +64,15 @@
       const router = new VueRouter({
         routes
       });
+
+      router.beforeEach((to, from, next) => {
+        if(to.meta.checkLogin){
+          alert("Please login first to access this page.")
+          next("/login")
+        }else{
+          next()
+        }
+      })
     
       const app = new Vue({
         router
