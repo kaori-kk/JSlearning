@@ -43,11 +43,22 @@
       };
       
       const User  = { template: '<h1>会員ページ</h1>' };
+
+      const NotFound = {
+        template: `
+          <div class="notFound">
+            <h1>404</h1>
+            <h2>Page is not found</h2>
+            <router-link to="/">Back to Top</router-link>
+          </div>`
+      }
     
       const routes = [
         { path: '/',    component: Home },
         { path: '/login', component: Login },
-        { path: '/user', component: User, meta: { checkLogin: true } }
+        { path: '/user', component: User, meta: { checkLogin: true } },
+        { path: '*', component: NotFound }
+
       ];
     
       const router = new VueRouter({
@@ -96,6 +107,10 @@
         -webkit-appearance: none;
         width:300px;
         height: 30px;
+      }
+
+      .notFound {
+        text-align: center;
       }
      </style>
 </body>
