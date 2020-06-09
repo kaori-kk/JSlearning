@@ -16,7 +16,7 @@
         <ul>
           <router-link tag="li" to="/" exact><a>Home</a></router-link>
           <router-link tag="li" to="/login"><a>Login</a></router-link>
-          <router-link tag="li" to="/user"><a>会員サイト</a></router-link>
+          <router-link tag="li" to="/user"><a>Membership</a></router-link>
         </ul>
       </nav>
       
@@ -27,6 +27,15 @@
       const Home = {template: '<h1>Welcome</h1>'};
       
       const Login  = { 
+        beforeRouteLeave(to, from, next){
+          const message = "Your information in form will be destroyed. Are you sure to leave this page?"
+          const answer = window.confirm(message)
+          if (answer){
+            next()
+          }else {
+            next(false)
+          }
+        },
         template: `
           <div>
             <h1>Login</h1>
@@ -37,12 +46,18 @@
               <input type="password" name="password" 　required="required" placeholder="Password"></input>
             </div>
             <div class="form-button">
-              <input  id="login-button" type="button" value="Login">
+              <input @click="logined()" id="login-button" type="button" value="Login">
             </div>
-          </div>` 
+          </div>`,
+        methods: {
+          logined:function(){
+            store.commit("logined")
+            this.$router.push("/user")
+          }
+        }
       };
       
-      const User  = { template: '<h1>会員ページ</h1>' };
+      const User  = { template: '<h1>Membership</h1>' };
 
       const NotFound = {
         template: `
@@ -66,11 +81,25 @@
       });
 
       router.beforeEach((to, from, next) => {
-        if(to.meta.checkLogin){
-          alert("Please login first to access this page.")
-          next("/login")
-        }else{
+      if(to.meta.checkLogin) {
+        if(!store.state.login) {
+          alert('ログインしてください。ログイン画面に遷移します')
+          next('/login')
+        } else {
           next()
+        }
+      } else {
+        next()
+      }
+  })
+      const store = new Vuex.Store({
+        state:{
+          login:false
+        },
+        mutations: {
+          logined:function(state){
+            state.login = true
+          }
         }
       })
     
