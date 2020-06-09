@@ -14,9 +14,35 @@
          :class="{ 'active': tab.compName === currentTab, 'deactive' : tab.compName != currentTab }"
          >{{ tab.menuName }}</a>
     </div>
+    <keep-alive>
+      <component v-bind:is="currentTab"></component>
+    </keep-alive>
   </div>
 
   <script>
+    Vue.component('new-account', {
+    template: `
+      <div class="tab-body">
+        <h2>Sign Up</h2>
+        Name：<input><br>
+        Email：<input><br>
+        Password：<input type=password><br>
+        Password Confirmation：<input type=password><br>
+        <button type="submit">Create Account</button>
+      </div>`
+  })
+
+  // ログイン画面用コンポーネント
+  Vue.component('login', {
+    template: `
+      <div class="tab-body">
+        <h2>Log In</h2>
+        Email：<input><br>
+        Password：<input type=password><br>
+        <button type="submit">Login</button>
+      </div>`
+  })
+
     new Vue({
       el: "#app",
       data: {
