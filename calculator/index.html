@@ -29,14 +29,36 @@
           ["4", "5", "6", "+"], 
           ["1", "2", "3", "-"], 
           ["0", "="]],
-        display: "0"
+        display: "0",
+        previous: ""
       },
       mutations: {
         addDisp(state, payload) {
-          if(state.display === "0") {
-            state.display = payload
-          } else {
-            state.display += payload
+          if(payload === "="){
+            state.display = eval(state.display)
+            return
+          }else if(payload === "+" || payload === "-"){
+            if(state.previous === "+" || state.previous === "-"){
+              return;
+            }
+            state.previous = payload;
+            state.display += payload;
+          }else if(payload === "C"){
+            state.display = "0";
+            state.previous = "";
+          }else {
+            if (state.previous === ""){
+              state.display = payload;
+              state.previous = payload
+            }else if (state.previous === "0"){
+              return;
+            }else {
+              if(state.previous === "+" || state.previous === "-"){
+                state.previous = ""
+              }
+              state.previous += payload;
+              state.display += payload;
+            }
           }
         }
       }
