@@ -7,40 +7,53 @@
 <body>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
   <script src="https://unpkg.com/vuex@2.0.0"></script>
-
+  
   <div id="app">
     <h1>Calculator</h1>
     <input type="text" :value="display" readonly>
     <div class="buttons" v-for="(row, index) in numbers" >
-      <button
-        v-for="(number, index2) in row"
-        :id="['button' + index + '-' + index2]" >
+      <button 
+        v-for="(number, index2) in row" 
+        :id="['button'+ index + '-' + index2 ]" 
+        @click="addDisp(number)">
           {{ number }}
-        </button>
+      </button>   
     </div>
   </div>
-
+  
   <script>
     const store = new Vuex.Store({
       state: {
         numbers: [
-          ["7", "8", "9", "C"],
-          ["4", "5", "6", "+"],
-          ["1", "2", "3", "-"],
-          ["0", "="]
-        ],
+          ["7", "8", "9", "C"], 
+          ["4", "5", "6", "+"], 
+          ["1", "2", "3", "-"], 
+          ["0", "="]],
         display: "0"
+      },
+      mutations: {
+        addDisp(state, payload) {
+          if(state.display === "0") {
+            state.display = payload
+          } else {
+            state.display += payload
+          }
+        }
       }
     })
     const { mapState } = Vuex
-
     new Vue({
       store,
       el: "#app",
-      computed: mapState(["numbers", "display"])
+      computed: mapState(['numbers', 'display']),
+      methods: {
+        addDisp(number) {
+          this.$store.commit('addDisp',number)
+        }
+      }
     })
   </script>
-
+  
   <style>
     button {
       width: 70px;
@@ -56,7 +69,7 @@
       font-size: 15px;
       border-width:1px;
       border-color: black;
-    border-style: solid;
+    border-style: solid;	
       width: 280px;
       height: 50px;
       padding-left: 5px;
