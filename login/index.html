@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>login</title>
+</head>
+<body>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+
+  <div id="app">
+    <div class="menu">
+      <a v-for="tab in tabs"
+         v-on:click="currentTab = tab.compName"
+         :class="{ 'active': tab.compName === currentTab, 'deactive' : tab.compName != currentTab }"
+         >{{ tab.menuName }}</a>
+    </div>
+  </div>
+
+  <script>
+    new Vue({
+      el: "#app",
+      data: {
+        tabs: [
+          {menuName: "Log in", compName: "login"},
+          {menuName: "Sign up", compName: "new-account"}
+        ],
+        currentTab: "login"
+      }
+    })
+  </script>
+
+  <style>
+    #app {
+      margin-left: 10px;
+    }
+    .menu {
+      padding-top: 10px;
+    }
+    .menu a {
+      padding: 10px 10px 10px 10px;
+    }
+    .deactive {
+      background: #dcdcdc;
+      color: #a9a9a9;
+    }
+    .active {
+      background:#87cefa;
+    }
+    button {
+      margin-top: 10px;
+    }
+  </style>
+</body>
+</html>
